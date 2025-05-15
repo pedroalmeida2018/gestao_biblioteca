@@ -11,7 +11,7 @@ public class GestaoEmprestimos extends JFrame {
 
     public GestaoEmprestimos() {
         setTitle("Gestão de Empréstimos");
-        setSize(600, 400);
+        setSize(500, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
@@ -83,15 +83,16 @@ public class GestaoEmprestimos extends JFrame {
         // Popular tabela
         Main.getEmprestimos().forEach(emp -> modeloTabela.addRow(emp));
 
-        // Listeners básicos (sem lógica de negócio detalhada)
+        // Listeners
         btnValidarEmprestimo.addActionListener(e -> {
             String membro = (String) comboMembro.getSelectedItem();
             String livro = (String) comboLivro.getSelectedItem();
             String data = txtDataEntrega.getText();
             if (membro != null && livro != null && !data.isEmpty()) {
-                String[] novo = {livro, membro, "Ativo", LocalDate.now().toString(), data};
+                String[] novo = {livro, membro, "Ativo", java.time.LocalDate.now().toString(), data};
                 Main.getEmprestimos().add(novo);
-                modeloTabela.addRow(novo); // Adiciona ao histórico imediatamente
+                modeloTabela.setRowCount(0); // Limpa a tabela
+                Main.getEmprestimos().forEach(emp -> modeloTabela.addRow(emp)); // Atualiza histórico
                 comboLivro.removeItem(livro);
                 JOptionPane.showMessageDialog(this, "Empréstimo registado com sucesso!");
             } else {
